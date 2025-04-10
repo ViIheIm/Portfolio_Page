@@ -1,0 +1,171 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root {
+		--dark-theme-background-color: #181818;
+		--dark-theme-font-color: #CCCCCC;
+		--light-theme-background-color: #EEEEEE;
+		--light-theme-font-color: #181818;
+
+		--active-background-color: var(--dark-theme-background-color);
+		--active-font-color: var(--dark-theme-font-color);
+
+		--element-bottom-margin: 380px;
+		--element-short-bottom-margin: 100px;
+
+		--first-element-top-margin: 25%;
+		--last-element-bottom-margin: 50%;
+}
+
+body {
+		font-family: "Ubuntu Mono", sans-serif;
+		font-weight: 400;
+		font-style: normal;
+		
+		color: var(--active-font-color);
+		background-color: var(--active-background-color);
+}
+
+a {
+		text-decoration: none;
+		color: inherit;
+}
+
+p {
+		margin: 10px;
+}
+
+
+.header {
+		font-weight: 600;
+
+		padding: 50px;
+
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+}
+
+.header > * {
+		margin-right: 50px;
+}
+
+.headerButton {
+		border: 2px solid var(--active-font-color);
+		border-radius: 10px;
+		padding: 10px;
+}
+
+@keyframes buttonColorFadeIn {
+		from {
+				background-color: var(--active-background-color);
+				color: var(--active-font-color);
+		}
+		to {
+				background-color: var(--active-font-color);
+				color: var(--active-background-color);
+		}
+}
+
+.headerButton:hover {
+		animation: buttonColorFadeIn 1s;
+		animation-fill-mode: forwards;
+}
+
+
+
+.centeredDiv {
+		margin-left: 25%;
+		margin-right: 25%;
+}
+
+@keyframes fadeIn {
+		from {
+				opacity: 0;
+		}
+		to {
+				opacity: 1;
+		}
+}
+
+.fadeInTextElement {
+		animation: fadeIn linear;
+		animation-timeline: view();
+		animation-range: entry 0% cover 30%;
+
+		color: var(--active-font-color);
+		background-color: var(--active-background-color);
+
+		text-align: center;
+		margin-bottom: var(--element-bottom-margin);
+
+		font-size: 35px;
+}
+
+@keyframes boxShadowFadeIn {
+		from {
+
+		}
+		to {
+				border: 5px solid var(--active-font-color);
+				border-radius: 10px;
+		}
+}
+
+.fadeInImageElement {
+		animation: fadeIn linear;
+		animation-timeline: view();
+		animation-range: entry 0% cover 30%;
+
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 100%;
+
+		border: 5px solid var(--active-background-color);
+		border-radius: 10px;
+
+		margin-bottom: var(--element-bottom-margin);
+}
+
+.fadeInImageElement:hover {
+		animation: boxShadowFadeIn 1s;
+		animation-fill-mode: forwards;
+}
+
+.fadeInVideoElement {
+		animation: fadeIn linear;
+		animation-timeline: view();
+		animation-range: entry 0% cover 30%;
+
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 100%;
+
+		border: 5px solid var(--active-background-color);
+		border-radius: 10px;
+
+		margin-bottom: var(--element-bottom-margin);
+}
+
+.fadeInYoutubeIframe {
+		animation: fadeIn linear;
+		animation-timeline: view();
+		animation-range: entry 0% cover 30%;
+
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		height: 720px;
+		width: 1280px;
+
+		border: 5px solid var(--active-background-color);
+		border-radius: 10px;
+
+		margin-bottom: var(--element-bottom-margin);
+
+		frameborder: 0;
+		allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+		referrerpolicy: "strict-origin-when-cross-origin";
+}

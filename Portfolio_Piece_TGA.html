@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>TGA Portfolio Piece</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="stylesheet.css">
+
+<style>
+</style>
+
+
+<body>
+
+
+<div class="header">
+	<div class="headerButton"><a href="index.html">Home Page</a></div>
+	<div class="headerButton"><a href="Portfolio_BongusCode.html">BongusCode</a></div>
+	<div class="headerButton"><a href="Portfolio_Piece_TGA.html">Portfolio piece at TGA Stockholm</a></div>
+	<div class="headerButton"><a href="Portfolio_TGA_Group_Projects.html">Group projects at TGA</a></div>
+	<div class="headerButton"><a href="contact.html">Contact</a></div>
+</div>
+
+
+<div class="centeredDiv">
+	
+	<div class="fadeInTextElement" style="margin-top: var(--first-element-top-margin)">
+		<p>This piece of my portfolio is from when I was a student at<br>
+			The Game Assembly in Stockholm.<br>
+			Here I was a part of Team Catnap, and we made a few games<br>
+			in our in-house engine which we also developed at school,<br>
+			called <b>Kitty Engine</b>.<br>
+			This piece was about extending Kitty Engine with new functionality.
+		</p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p>
+			<b>The Mission:</b><br>
+			I wanted to extend Kitty Engine with a scripting option to write game code.<br>
+			Naturally, I went with Lua.<br>
+			Lua is an elegant and lightweight scripting language which is easy to learn<br>
+			and easy to use. Most importantly; Lua is very performant, especially<br>
+			for a scripting language.
+		</p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p><b>The Plan:</b><br>
+			To facilitate game development in Lua,<br>
+			I needed to develop some tools.<br>
+			Firstly, I wanted an in-engine text editor.<br>
+			This would allow me to easily test Lua code.<br>
+			Secondly, I needed to integrate Lua scripts into our component system.<br>
+			Thirdly, I needed to develop a scripting API.<br>
+			To enable all of this, I made use of the immaculate Lua-C++ binding Sol,<br>
+			which has	made working on my portfolio piece an utter joy:<br>
+			<a href="https://github.com/ThePhD/sol2" target="_blank"><b>https://github.com/ThePhD/sol2</b></a>
+		</p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p><b>Step 1: Hello, Kitty Engine!</b><br>
+			At this point Lua was already up and running, but the environment was far from complete.<br>
+			There was no error handling except for the default handler, which just throws<br>
+			an error and crashes the whole program if it encounters a Lua error.<br>
+			Also, there was no scripting API yet, so the most I could do at this point was mess about<br>
+			with tables and print to stdout.<br>
+			There was no serialization or deserialization of scripts either.<br>
+			Despite the austerity of this humble environment I had set up,<br>
+			Lua was still technically already integrated,<br>
+			and the rest of the pieces soon fell into place.<br>
+			<br>(click on the images to get a bigger view)
+		</p>
+	</div>
+	
+	<a href="content/TGA_Portfolio_Piece/1_Hello_World.png" target="_blank" id="1_Hello_World">
+		<img src="content/TGA_Portfolio_Piece/1_Hello_World.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p><b>Step 2: User defined datatypes</b><br>
+			If we want to create a useful scripting API, we’ll of course need to support<br>
+			custom data types. More importantly, we need to expose custom datatypes from C++.<br>
+			We don’t need to expose our entire component system in one fell swoop though.<br>
+			Let’s take it one step at a time, and expose a simple struct consisting of 2 ints:
+		</p>
+	</div>
+
+	<a href="content/TGA_Portfolio_Piece/2_First attempt at custom data types.png" target="_blank" id="2_First attempt at custom data types - code crop">
+		<img src="content/TGA_Portfolio_Piece/2_First attempt at custom data types - code crop.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p>
+			As we can see, we have a struct called Tuple.<br>
+			We’re only interested in treating it as POD at this point, methods will come later.<br>
+			Here we can also see the flexibility and ease-of-use of Sol.<br>
+			Our tuple is a global instance, and after opening Lua’s libs we bind our global instance.<br>
+			Then, we create a new user type for our tuple, which in this case involves just<br>
+			exposing the members.<br>
+			Finally, we showcase Sol’s ability to get our bound variables by getting a pointer<br>
+			to our tuple (we can just directly modify the global instance of course, but I just thought it was<br>
+			worth it to showcase this feature of Sol).<br>
+			Using this pointer, we set the values in C++, but will this be reflected in Lua?
+		</p>
+	</div>
+
+	<a href="content/TGA_Portfolio_Piece/2_First attempt at custom data types - editor crop.png" target="_blank" id="2_First attempt at custom data types - editor crop">
+		<img src="content/TGA_Portfolio_Piece/2_First attempt at custom data types - editor crop.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p>
+			<br>
+			The answer is yes!<br>
+			The instance’s members are accessible from Lua, and their values are correct.<br>
+			We can of course change this instance’s values from Lua and it will be reflected in C++,<br>
+			so this communication isn’t merely one-way.
+		</p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p>
+			<b>Step 3: Running C++ functions in Lua</b><br>
+			Exposing user defined datatypes is all well and good, but we want to expose functions too.<br>
+			Luckily, Sol makes this just as easy:
+		</p>
+	</div>
+
+	<a href="content/TGA_Portfolio_Piece/3_Binding and running Cpp functions - code crop.png" target="_blank" id="3_Binding and running Cpp functions - code crop">
+		<img src="content/TGA_Portfolio_Piece/3_Binding and running Cpp functions - code crop.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p>
+			And here is the result in-engine:
+		</p>
+	</div>
+
+	<a href="content/TGA_Portfolio_Piece/3_Binding and running Cpp functions - editor crop.png" target="_blank" id="3_Binding and running Cpp functions - editor crop">
+		<img src="content/TGA_Portfolio_Piece/3_Binding and running Cpp functions - editor crop.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p>
+			<b>Step 4: Serialization, deserialization and a pretty text editor.</b><br>
+			At this point we have implemented quite a few things, and the integration is starting to take shape.<br>
+			Now, I would like to serialize and deserialize Lua files from/to disk.<br>
+			I would also like a proper text editor, because a default Dear ImGUI-textbox<br>
+			doesn’t feature syntax highlighting, and tab switches focus to the<br>
+			execute-button instead of	inserting a tab in the textbox.<br>
+			My good friend and Catnap teammate Assar Bergh helped me with both.<br>
+			In one fell swoop, he added an editor window and added serialization/deserialization to<br>
+			the bin folder (a huge thank you for the help!).<br>
+			The editor window was made using ImGUIColorTextEdit:
+			<a href="https://github.com/BalazsJako/ImGuiColorTextEdit" target="_blank"><b>https://github.com/BalazsJako/ImGuiColorTextEdit</b></a><br>
+			which Assar had already integrated into Kitty Engine.<br>
+			<br>
+			After his help, I just moved the serialization/deserialization target to a scripts folder<br>
+			in Kitty Engine’s assets folder to have everything organized, and then<br>
+			this step was over.
+		</p>
+	</div>
+
+	<a href="content/TGA_Portfolio_Piece/4_Hello ImGUIColorTextEdit - code crop.png" target="_blank" id="4_Hello ImGUIColorTextEdit - code crop">
+		<img src="content/TGA_Portfolio_Piece/4_Hello ImGUIColorTextEdit - code crop.png" class="fadeInImageElement">
+	</a>
+
+	<a href="content/TGA_Portfolio_Piece/4_Hello ImGUIColorTextEdit - editor crop.png" target="_blank" id="4_Hello ImGUIColorTextEdit - editor crop">
+		<img src="content/TGA_Portfolio_Piece/4_Hello ImGUIColorTextEdit - editor crop.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p>
+			<b>Step 5: Error handling</b><br>
+			At this point we can do a few cool things with our tuple and our functions,<br>
+			but developing Lua-scripts right now is still a painful process.<br>
+			Granted, we now have syntax highlighting, but we still crash to desktop every time<br>
+			we try to execute a Lua script with errors.<br>
+			This won’t do. We’re expecting errors while we’re writing scripts, right?<br>
+			We need to implement error handling that can tell us what error was encountered,<br>
+			and also recover gracefully.<br>
+			Luckily, Sol has not only an elegant way of integrating custom error handlers,<br>
+			the documentation page gives an almost perfect implementation for our purposes, so I<br>
+			copied over that implementation.
+		</p>
+	</div>
+
+	<a href="content/TGA_Portfolio_Piece/5_Error handling - code crop.png" target="_blank" id="5_Error handling - code crop">
+		<img src="content/TGA_Portfolio_Piece/5_Error handling - code crop.png" class="fadeInImageElement">
+	</a>
+
+	<a href="content/TGA_Portfolio_Piece/5_Error handling - editor crop.png" target="_blank" id="5_Error handling - editor crop">
+		<img src="content/TGA_Portfolio_Piece/5_Error handling - editor crop.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p>
+			<b>Step 6: Lua script components</b><br>
+			We now have a proper editor and the means to develop and execute Lua scripts comfortably.<br>
+			However, all scripts exist only in the Lua editor, which comes with a bunch of shortcomings.<br>
+			Firstly, the Lua editor lives and dies with the Kitty Engine Editor, and we can only run Lua from the<br>
+			Lua editor as of yet, so any release build would not be able to run Lua.<br>
+			Secondly, there is no established hierarchy and no well defined architecture here.<br>
+			Everything just gets ran from this monolithic editor.<br>
+			The solution to this is to add script components to our component system.<br>
+			This would be somewhat similar to how e.g. Unity does things, wherein C# scripts exists on<br>
+			game objects, and can access their parent.<br>
+			Here’s the header and the translation unit of the final implementation:
+		</p>
+	</div>
+
+	<a href="content/TGA_Portfolio_Piece/6_ScriptComponent Header.png" target="_blank" id="6_ScriptComponent Header">
+		<img src="content/TGA_Portfolio_Piece/6_ScriptComponent Header.png" class="fadeInImageElement">
+	</a>
+
+	<a href="content/TGA_Portfolio_Piece/6_ScriptComponent TU.png" target="_blank" id="6_ScriptComponent TU">
+		<img src="content/TGA_Portfolio_Piece/6_ScriptComponent TU.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p>
+			As you can see, the script component is not overly complicated.<br>
+			The interface provided in the header is mandated by all components, but we are mostly<br>
+			interested in the methods: SetData, Awake and Update.<br>
+			SetData is ran by the importer when we read in our game objects<br>
+			and their respective components from Json.<br>
+			All it does in this case is deserialize a script from the scripts folder among our assets.<br>
+			Awake is ran once when we load a given scene,<br>
+			and here we open Lua’s base library aswell as all of the functions,<br>
+			usertypes and constant variables (e.g. keycodes) defined in our scripting API (more on this later).<br>
+			Update is ran once per component per game object per frame, so each frame we<br>
+			also update all mutating variables accessible through Lua (e.g. delta time), and then we run<br>
+			the script assigned to this component, with error handling of course.<br>
+			<br>
+			The benefit of this architecture is that scripts can belong to game objects like any other component,<br>
+			and due to the nature of our component system,<br>
+			the scripts are hot-reloadable aswell.<br>
+			This means that you can edit your Lua script (either externally or with the editor we built,<br>
+			whichever you prefer), save it, hit stop and then start again,<br>
+			and the scripts will reload completely, without having to wait for long compile times.<br>
+			This allows for rapid development and testing of gameplay code.
+		</p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p>
+			<b>Step 7: The scripting API</b><br>
+			By far the biggest piece on this board, the scripting API defines what is accessible in Lua.<br>
+			This means that all components, user-defined types, functions, methods, non-Lua variables etc.<br>
+			must be registered and maintained by the API.<br>
+			The header is rather simple.<br>
+			It just consists of two functions wrapped in a suitable namespace,<br>
+			and internal forward declarations of their parameter’s types:
+		</p>
+	</div>
+
+	<a href="content/TGA_Portfolio_Piece/7_Scripting API Header.png" target="_blank" id="7_Scripting API Header">
+		<img src="content/TGA_Portfolio_Piece/7_Scripting API Header.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p>
+			The translation unit is where it gets interesting though:
+		</p>
+	</div>
+
+	<a href="content/TGA_Portfolio_Piece/7_Scripting API TU.png" target="_blank" id="7_Scripting API TU">
+		<img src="content/TGA_Portfolio_Piece/7_Scripting API TU.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p>
+			The scripting API is by far the biggest piece of code needed in this portfolio project,<br>
+			and this is an extremely modest API as of yet.<br>
+			It doesn’t feature that much to be honest, but it does feature enough functionality<br>
+			to develop a simple player controller with animations, as we’ll see.
+		</p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p>
+			<b>All together now:</b><br>
+			Enough exposition, let’s see some results!<br>
+			Here is the script for a simple player controller using our scripting API:
+		</p>
+	</div>
+
+	<a href="content/TGA_Portfolio_Piece/8_Player controller script.png" target="_blank" id="8_Player controller script">
+		<img src="content/TGA_Portfolio_Piece/8_Player controller script.png" class="fadeInImageElement">
+	</a>
+	
+	<div class="fadeInTextElement">
+		<p>
+			And here is the result:
+		</p>
+	</div>
+
+	<video class="fadeInVideoElement" controls>
+		<source src="content/TGA_Portfolio_Piece/9_All together now - Crop.mp4" type="video/mp4">
+	</video>
+
+	<div class="fadeInTextElement" style="margin-bottom: var(--last-element-bottom-margin)">
+		<p>
+			Of course, this is by no means a good player controller, it is about as<br>
+			bare-bones as you can get.<br>
+			Still, I hope it illustrates the versatility of the script component and scripting API.<br>
+			Because of the framework we’ve established, we just need to expand the scripting API<br>
+			with new functionality, and we’ve already seen how easy Sol makes that part.<br>
+			<br>
+			Thank you for following the abridged version of this journey with me,<br>
+			it’s been an absolute blast.
+			<b>-Vilhelm</b>
+		</p>
+	</div>
+
+</div>
+
+</body>
+</html>

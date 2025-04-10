@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>BongusCode Portfolio Piece</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="stylesheet.css">
+
+<style>
+</style>
+
+
+<body>
+
+
+<div class="header">
+	<div class="headerButton"><a href="index.html">Home Page</a></div>
+	<div class="headerButton"><a href="Portfolio_BongusCode.html">BongusCode</a></div>
+	<div class="headerButton"><a href="Portfolio_Piece_TGA.html">Portfolio piece at TGA Stockholm</a></div>
+	<div class="headerButton"><a href="Portfolio_TGA_Group_Projects.html">Group projects at TGA</a></div>
+	<div class="headerButton"><a href="contact.html">Contact</a></div>
+</div>
+
+
+<div class="centeredDiv">
+
+	<div class="fadeInTextElement" style="margin-top: var(--first-element-top-margin)">
+		<p><b>BongusCode</b>, or BC:PL (not to be confused with BCPL) is a C-like compiled programming language.<br>
+			It compiles straight down to assembly.<br>
+			In short, it's just a little hobby project of mine which I developed to learn about compilers.<br>
+			<br>
+			The github-repository is available here:<br>
+			<a href="https://github.com/ViIheIm/BongusCode_Compiler" target="_blank"><b>https://github.com/ViIheIm/BongusCode_Compiler</b></a><br>
+		</p>
+	</div>
+	
+	<div class="fadeInTextElement">
+		<p><b>BongusCode Sample</b></p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p>
+			Here we can see a simple implementation of rule 110 which was translated from an implementation<br>
+			in C which was made by the brilliant programmer Tsoding.<br>
+			<a href="https://gist.github.com/rexim" target="_blank"><b>https://gist.github.com/rexim</b></a><br>
+			And the implementation:<br>
+			<a href="https://gist.github.com/rexim/c595009436f87ca076e7c4a2fb92ce10" target="_blank"><b>https://gist.github.com/rexim/c595009436f87ca076e7c4a2fb92ce10</b></a>
+		</p>
+	</div>
+
+	<a href="content/BongusCode/BCL_Rule110_Source.png" target="_blank" id="BC:PL Translation Unit">
+		<img src="content/BongusCode/BCL_Rule110_Source.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p>And here is the console printout after running the resulting exe!<br>
+			(the compiled assembly was assembled and linked with MASM using Visual Studio)
+	</div>
+
+	<a href="content/BongusCode/Rule110.png" target="_blank" id="Rule110 implemented in BC:PL">
+		<img src="content/BongusCode/Rule110.png" class="fadeInImageElement">
+	</a>
+
+	<div class="fadeInTextElement">
+		<p><b>Per-component Details</b><br>
+		</p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p><b>Lexer:</b><br>
+			The lexer is a unicode-compatible lexer made with RE/Flex.<br>
+			It is written in flex which is compiled by RE/Flex into<br>
+			a DFA-based lexer implementation in C++.<br>
+			RE/Flex is an amazing regex-library fit for more things<br>
+			than just lexer generation, e.g. regex matching.<br>
+			The main reason for using RE/Flex is for it's unicode compatibility,<br>
+			since I wanted to allow for unicode symbols in BongusCode.<br>
+			Another big reason is that it is very easy to use once you've<br>
+			set up everything.
+		</p>
+
+		<a href="https://github.com/Genivia/RE-flex?tab=readme-ov-file" target="_blank"><b>https://github.com/Genivia/RE-flex?tab=readme-ov-file</b></a>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p><b>Parser:</b><br>
+			The parser is an LALR parser generated with GNU Bison.<br>
+			Much like the lexer, the parser is written in a separate language which is compiled into C++.<br>
+			In this case, the unit being compiled is a BNF grammar specification.<br>
+			Bison also employs a DFA(Deterministic Finite Automaton) as a parsing algorithm.<br>
+			in the generated C++ code.<br>
+			The main reasons for using Bison are; it is very user-friendly,<br>
+			it's available under a permissive license and it's fairly easy to set up on Windows.<br>
+			Also, it works really well and is fantastic to use, much like RE/Flex.<br>
+			<a href="https://www.gnu.org/software/bison/" target="_blank"><b>https://www.gnu.org/software/bison/</b></a>
+		</p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p><b>Abstract Syntax Tree:</b><br>
+			The abstract syntax tree is a collection of classes which derives from a common superclass,
+			which has	the basic structure of the tree embedded in it, with things like a parent pointer,<br>
+			right sibling pointer, leftmost sibling pointer etc.<br>
+			One somewhat clever solution to node type reflection is using a kind enum<br>
+			which is also stored in the superclass.<br>
+			This kind-member is wired up while it's being created and installed in the AST<br>
+			by the parser -- so upon instantiation.<br>
+			This kind-enum allows us to easily get the kind of a node, which is an extremely common<br>
+			operation in compilers, without having to rely on a double dispatch scheme.<br>
+			This approach means that we can use a simple switch case or even an<br>
+			occasional if-statement on node types, and we can also avoid the big amount<br>
+			of boilerplate needed in double dispatch,<br>
+			so this approach is less noisy and slightly more performant!<br>
+			Each node in the tree is allocated on the heap, so the AST is not very cache-friendly.<br>
+		</p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p><b>Application Binary Interface:</b><br>
+			The ABI is a simplified version of the x64 ABI Microsoft uses in MSVC,<br>
+			with a few key differences.<br>
+			<a href="https://learn.microsoft.com/en-us/cpp/build/x64-software-conventions?view=msvc-170" target="_blank"><b>https://learn.microsoft.com/en-us/cpp/build/x64-software-conventions?view=msvc-170</b></a><br>
+			One notable difference is that when passing parameters to functions,<br>
+			BongusCode only allows 4 parameters.<br>
+			In the x64 ABI, pointers and integer parameters 1 through 4 are passed in RCX, RDX,<br>
+			R8 and R9 in that order, and parameters 5 and up are passed on the stack.<br>
+			Because of how BongusCode handles stack manipulations,<br>
+			it just allows the first 4 parameters,<br>
+			so the stack is never used for passing parameters.<br>
+			<br>
+			When interfacing with libc, the stack is also aligned by subtracting 16 from rsp<br>
+			right before calling the function,<br>
+			then 16 is immediately added to rsp to maintain this alignment.<br>
+			Because of how BongusCode handles temporaries,<br>
+			the stack cannot be guaranteed to be aligned in the way the x64 ABI mandates,<br>
+			so this ad-hoc alignment hackaround is necessary for all external calls.<br>
+			Functions defined in BC:PL are not restricted by this however -- the stack<br>
+			is never aligned when calling them.<br>
+			<br>
+			Temporaries are handled in a very unoptimal way.<br>
+			There is no scheduling present at all.<br>
+			All of the temporaries used throughout an expression are stored<br>
+			on the stack.<br>
+			Moreover, the temporaries are never reused.<br>
+			This means that even a few moderately simple<br>
+			expressions can eat a lot of stack memory (yum!).<br>
+			If we examine the rule 110 implementation for instance,<br>
+			we can see that it eats a total of 192 bytes(!) of stack memory,<br>
+			wherein 72 of those bytes are temporaries.<br>
+			In a proper compiler,	we could likely get away with<br>
+			neatly tucking all of the temporaries in registers,<br>
+			and not using the stack at all.
+			
+		</p>
+	</div>
+
+	<div class="fadeInTextElement">
+		<p><b>Code Generation:</b><br>
+			The code generation part of the compiler is more or less performed<br>
+			right after the parser has constructed the AST.<br>
+			There is no IR language in place here -- the AST serves as the intermediate representation.<br>
+			This means that the compiler doesn't perform any optimizations at all.<br>
+			Of course, having a low level language implementation with zero optimizations present is<br>
+			not very desirable.<br>
+			However, this project was made in a more illustrative and educational sense -- I wanted to have<br>
+			a vertical slice of a language based on C which was as simple as could be with it still being<br>
+			turing complete, so that I could learn about compiler design and have a reference resource<br>
+			which I could refer to in the future.<br>
+			As a side note: having a consolidated piece of code like this is extremely useful for learning<br>
+			programming	in general, and not just compiler design.<br>
+			Even if the web is an excellent resource (and AI now also in recent years),<br>
+			it just cannot beat having everything readily available and<br>
+			stitched together in one cohesive unit, and the process of<br>
+			reading and watching resources on the web and actually<br>
+			applying that in your projects is how<br>
+			you actually learn those things.<br>
+			Tying this into the previous point;<br>
+			if BongusCode were to feature optimizations,<br>
+			I'd have to design a complete IR language and translate the AST into this language,<br>
+			and then implement several passes of optimizations on that generated IR.<br>
+			So the codebase would get much larger and the extra code would obscure the vertical slice.<br>
+			In short; this compiler was implemented with the goal of learning about compilers.
+		</p>
+	</div>
+
+</div>
+</div>
+
+</body>
+</html>
